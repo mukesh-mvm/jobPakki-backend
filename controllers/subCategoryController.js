@@ -1,11 +1,13 @@
 import SubCategory from '../models/SubCategory.js';
 import Category from '../models/CatagoryModel.js';
+import slugify from 'slugify';
 
 // Create a new subcategory
 export const createSubCategory = async (req, res) => {
   try {
     const { name, parent,title,para } = req.body;
-
+   
+    const  slug=  slugify(req.body.name).toLowerCase()
     // Check if subcategory already exists
     const existingSubCategory = await SubCategory.findOne({ name });
     if (existingSubCategory) {
@@ -20,7 +22,7 @@ export const createSubCategory = async (req, res) => {
       }
     }
 
-    const newSubCategory = new SubCategory({ name, parent ,title,para});
+    const newSubCategory = new SubCategory({ name, parent ,title,para,slug});
     await newSubCategory.save();
 
     res.status(201).json(newSubCategory);
@@ -58,6 +60,7 @@ export const getSubCategoryById = async (req, res) => {
 export const updateSubCategory = async (req, res) => {
   try {
     const { name, parent ,title,para} = req.body;
+    const  slug=  slugify(req.body.name).toLowerCase()
 
     // Check if parent category exists (if provided)
     if (parent) {
@@ -69,7 +72,7 @@ export const updateSubCategory = async (req, res) => {
 
     const subCategory = await SubCategory.findByIdAndUpdate(
       req.params.id,
-      { name, parent,title,para, updatedAt: Date.now() },
+      { name, parent,title,para,slug:slug, updatedAt: Date.now() },
       { new: true }
     ).populate('parent', 'name');
 

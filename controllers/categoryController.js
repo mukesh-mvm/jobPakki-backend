@@ -1,3 +1,4 @@
+import slugify from 'slugify';
 import Category from '../models/CatagoryModel.js'; // Assuming the model is in the 'models' directory
 
 
@@ -5,6 +6,7 @@ import Category from '../models/CatagoryModel.js'; // Assuming the model is in t
 export const createCategory = async(req,res)=>{
    try {
       const {name,title,para} = req.body;
+     const  slug=  slugify(req.body.name).toLowerCase()
 
       if(!name){
         return res.status(400).json({message:"Please provide category Name"})
@@ -18,7 +20,7 @@ export const createCategory = async(req,res)=>{
          return res.status(400).json({message:"Category Already Exist"})
       }
 
-      const newCategory = new Category({name,title,para})
+      const newCategory = new Category({name,title,para,slug})
 
        await newCategory.save();
 
@@ -66,7 +68,8 @@ export const getCategoryById = async(req,res)=>{
 export const updateCategory = async (req, res) => {
     try {
       const { name,title,para } = req.body;
-      const category = await Category.findByIdAndUpdate(req.params.id, { name:name,title:title,para:para ,updatedAt: Date.now() }, { new: true });
+      const  slug=  slugify(req.body.name).toLowerCase()
+      const category = await Category.findByIdAndUpdate(req.params.id, { name:name,title:title,slug:slug,para:para ,updatedAt: Date.now() }, { new: true });
       
       if (!category) {
         return res.status(404).json({ message: 'Category not found' });

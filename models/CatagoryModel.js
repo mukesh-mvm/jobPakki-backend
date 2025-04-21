@@ -14,6 +14,12 @@ const CategorySchema = new mongoose.Schema({
     type:String,
   },
 
+  slug: {
+    type: String,
+    unique: true,
+    index: true,
+  },
+  
   para:{
     type:String,
    
