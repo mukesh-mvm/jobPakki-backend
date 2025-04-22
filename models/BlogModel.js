@@ -73,6 +73,11 @@ const BlogSchema = new mongoose.Schema(
             default: null,
           },
 
+          status:{
+            type:String,
+            default:"Inactive"
+          },
+
 
   },
   { timestamps: true }

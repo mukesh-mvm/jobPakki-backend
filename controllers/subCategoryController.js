@@ -87,6 +87,29 @@ export const updateSubCategory = async (req, res) => {
 };
 
 
+export const updateStatus = async (req, res) => {
+  try {
+
+    let SubCategories = await SubCategory.findById(req.params.id)
+   
+
+    if (!SubCategories) return res.status(404).json({ error: "Blog not found" });
+
+    if(SubCategories.status ==='Inactive')  {
+      SubCategories.status ='Active'
+    }else{
+      SubCategories.status ='Inactive'
+    }
+
+   const SubCategori =  await  SubCategories.save()
+
+    res.json(SubCategori);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+
 
 export const getSubcategoriesByCategoryId = async (req, res) => {
   try {

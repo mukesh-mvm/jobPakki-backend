@@ -5,7 +5,8 @@ import {
   getSubCategoryById,
   updateSubCategory,
   deleteSubCategory,
-  getSubcategoriesByCategoryId
+  getSubcategoriesByCategoryId,
+  updateStatus
 } from '../controllers/subCategoryController.js';
 
 const router = express.Router();
@@ -19,6 +20,7 @@ router.get('/getSubCategoryByCatId/:id', getSubcategoriesByCategoryId);
 
 // Get a subcategory by ID
 router.get('/get-subcategories/:id', getSubCategoryById);
+router.patch('/toggled/:id', updateStatus);
 
 // Update a subcategory by ID
 router.put('/update-subcategories/:id', updateSubCategory);

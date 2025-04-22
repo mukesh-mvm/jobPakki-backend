@@ -78,6 +78,29 @@ export const updateBlog = async (req, res) => {
   }
 };
 
+
+export const updateStatus = async (req, res) => {
+    try {
+  
+      let Blogs = await Blog.findById(req.params.id)
+     
+  
+      if (!Blogs) return res.status(404).json({ error: "Blog not found" });
+  
+      if(Blogs.status ==='Inactive')  {
+        Blogs.status ='Active'
+      }else{
+        Blogs.status ='Inactive'
+      }
+  
+     const blogs =  await  Blogs.save()
+  
+      res.json(blogs);
+    } catch (err) {
+      res.status(400).json({ error: err.message });
+    }
+  };
+
 // Delete Blog
 export const deleteBlog = async (req, res) => {
   try {

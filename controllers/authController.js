@@ -9,7 +9,7 @@ import  sendVerificationEmail from "../utils/sendEmail.js";
 // @route  POST /api/auth/register
 // @access Public
 export const registerUser = async (req, res) => {
-  const { name, email, phone, password, dateOfBirth, specialization } = req.body;
+  const { name, email, phone, password, dateOfBirth, specialization ,role} = req.body;
 
   try {
     const userExists = await User.findOne({ $or: [{ email }, { phone }] });
@@ -26,6 +26,7 @@ export const registerUser = async (req, res) => {
       dateOfBirth,
       specialization,
       verificationToken,
+      role
     });
 
     await sendVerificationEmail(email, verificationToken);
@@ -35,8 +36,30 @@ export const registerUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
+    console.log(error)
   }
 };
+
+
+export const getAllAdmin = async (req, res) => {
+  try {
+    const users = await User.find({
+      role: { $in: ['admin', 'superAdmin', 'seoAdmin'] }
+    }).select('+password'); // 👈 Explicitly include password
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({ message: "No admin users found" });
+    }
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+
+
 
 // @desc   Login user via email or phone
 // @route  POST /api/auth/login
@@ -59,6 +82,7 @@ export const loginUser = async (req, res) => {
           phone: user.phone,
           dateOfBirth: user.dateOfBirth,
           specialization: user.specialization,
+          role:user.role
         },
         token: token,
       });

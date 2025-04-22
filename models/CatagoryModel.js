@@ -30,6 +30,11 @@ const CategorySchema = new mongoose.Schema({
     default: Date.now,
   },
 
+  status:{
+    type:String,
+    default:"Inactive"
+  },
+
 
 
   updatedAt: {
