@@ -6,8 +6,10 @@ import {
   updateSubCategory,
   deleteSubCategory,
   getSubcategoriesByCategoryId,
-  updateStatus
+  updateStatus,
+  uploadImage
 } from '../controllers/subCategoryController.js';
+import upload from '../middlewares/single.js';
 
 const router = express.Router();
 
@@ -27,5 +29,7 @@ router.put('/update-subcategories/:id', updateSubCategory);
 
 // Delete a subcategory by ID
 router.delete('/delete-subcategories/:id', deleteSubCategory);
+
+router.post("/uploadImage", upload.single("image"), uploadImage );
 
 export default router;

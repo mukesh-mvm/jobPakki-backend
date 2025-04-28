@@ -41,22 +41,7 @@ export const registerUser = async (req, res) => {
 };
 
 
-export const getAllAdmin = async (req, res) => {
-  try {
-    const users = await User.find({
-      role: { $in: ['admin', 'superAdmin', 'seoAdmin'] }
-    }).select('+password'); // 👈 Explicitly include password
 
-    if (!users || users.length === 0) {
-      return res.status(404).json({ message: "No admin users found" });
-    }
-
-    res.status(200).json(users);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ message: "Server error." });
-  }
-};
 
 
 
@@ -140,3 +125,60 @@ export const getAllUser = async(req,res)=>{
     res.status(500).json({ message: "Server Error", error });
    }
 }
+
+
+export const getAllAdmin = async (req, res) => {
+  try {
+    const users = await User.find({
+      role: { $in: ['admin', 'superAdmin', 'seoAdmin'] }
+    }); // 👈 Explicitly include password
+
+    if (!users || users.length === 0) {
+      return res.status(404).json({ message: "No admin users found" });
+    }
+
+    res.status(200).json({
+      message:"Users find successfully",
+      users:users
+     })
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Server error." });
+  }
+};
+
+
+
+export const updateStatus = async (req, res) => {
+  try {
+
+    let Users = await User.findById(req.params.id)
+   
+
+    if (!Users) return res.status(404).json({ error: "Blog not found" });
+
+    if(Users.status ==='Inactive')  {
+      Users.status ='Active'
+    }else{
+      Users.status ='Inactive'
+    }
+
+   const users =  await  Users.save()
+
+    res.json(users);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+
+
+export const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.status(200).json({ message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

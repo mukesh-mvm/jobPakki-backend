@@ -7,6 +7,7 @@ import categoryRoutes from './routes/categoryRoutes.js'; // Import the category 
 import subCategoryRoutes from './routes/subCategoryRoutes.js';
 import tagRoutes from './routes/tagRoutes.js'
 import blogRoutes from './routes/blogRoutes.js'
+import jobRoutes from './routes/jobRoutes.js';
 import cors from "cors";
 
 import multer from "multer";
@@ -74,7 +75,7 @@ app.use(
 // app.use(cors()); 
 
 app.use(express.json());
-
+app.use('/uploads', express.static('uploads'));
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -82,6 +83,7 @@ app.use("/api/catagory", categoryRoutes);
 app.use("/api/subcatagory", subCategoryRoutes);
 app.use("/api/tag", tagRoutes);
 app.use("/api/blog", blogRoutes);
+app.use("/api/job", jobRoutes);
 
 
 
